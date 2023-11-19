@@ -220,7 +220,7 @@ def convert_HA_residues(marker_dict, HA_types, structure_folder):
     updated_marker_dict = marker_dict.copy()  # Create copy
     for protein in list(marker_dict.keys()):
         if protein in HA_types:
-            mapping_data = pd.read_csv(f"../data/{structure_folder}/H3_{protein}", sep = "\t", header = None,
+            mapping_data = pd.read_csv(f"{structure_folder}/H3_{protein}", sep = "\t", header = None,
                                        names = ['H3', protein])
             convert_to_h3_dict = dict(zip(mapping_data[protein], mapping_data['H3']))
 
@@ -320,7 +320,7 @@ def renumber_proteins(fasta_path, acc_pro_dict, marker_dict):
         if protein_abbr in marker_dict or is_ha_type:
             try:
                 # Construct the path to the standard sequence file
-                standard_seq_path = os.path.join(STANDARD_PATH, f"{protein_abbr}.fas")
+                standard_seq_path = os.path.join(STANDARD_PATH, f"/{protein_abbr}.fas")
                 standard_seq = next(SeqIO.parse(standard_seq_path, 'fasta')).seq
 
                 # Perform global alignment
@@ -341,7 +341,7 @@ def renumber_proteins(fasta_path, acc_pro_dict, marker_dict):
 
         # Convert other HA subtype numbering to H3
         if is_ha_type:
-            renumbered_positions = convert_HA_residues(HA_results, protein_abbr, "STRUCTURE_PATH")
+            renumbered_positions = convert_HA_residues(HA_results, protein_abbr, STRUCTURE_PATH)
             # Change the key from 'H3' to the protein ID
             renumbered_positions[protein_id] = renumbered_positions.pop('H3')
             renumbering_results.update(renumbered_positions)
@@ -464,11 +464,11 @@ def parse_args():
     pred_parser = subparsers.add_parser('pred', help = 'Predict new data labels using a trained model.')
     pred_parser.add_argument('-i', '--input', required = True, type = str,
                              help = 'Input CSV file with marker data or directory containing such files.')
-    pred_parser.add_argument('-m', '--model_path', default = MODEL_PATH+'gnb_model.joblib', type = str,
+    pred_parser.add_argument('-m', '--model_path', default = MODEL_PATH+'/gnb_model.joblib', type = str,
                              help = 'Path to the trained model file.')
-    pred_parser.add_argument('-th', '--threshold_path', default = MODEL_PATH+'optimal_threshold.joblib', type = str,
+    pred_parser.add_argument('-th', '--threshold_path', default = MODEL_PATH+'/optimal_threshold.joblib', type = str,
                              help = 'Path to the file containing the optimal threshold value.')
-    pred_parser.add_argument('-f', '--top_features_path', default = MODEL_PATH+'top_features.joblib', type = str,
+    pred_parser.add_argument('-f', '--top_features_path', default = MODEL_PATH+'/top_features.joblib', type = str,
                              help = 'Path to the file containing the top features.')
     pred_parser.add_argument('-o', '--output_directory', type = str, default = '.',
                              help = 'Directory to save the prediction results. Defaults to the current directory.')
@@ -504,7 +504,7 @@ def process_extract_cmd(input_file, args, is_directory = True):
     else:
         annotations = pd.read_csv(f"{args.anno_path}")
     acc_pro_dic = dict(zip(annotations.iloc[:, 0], annotations.iloc[:, 1]))
-    marker_dict = annotate_markers(DATA_APTH+"single_adaptability_markers.xlsx", DATA_APTH+"single_receptor.xlsx",
+    marker_dict = annotate_markers(DATA_PATH+"/single_adaptability_markers.xlsx", DATA_PATH+"/receptor.xlsx",
                                    args.receptor_markers)
     renumbering_results = renumber_proteins(
         fasta_path = str(input_file),
