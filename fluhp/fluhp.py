@@ -320,7 +320,7 @@ def renumber_proteins(fasta_path, acc_pro_dict, marker_dict):
         if protein_abbr in marker_dict or is_ha_type:
             try:
                 # Construct the path to the standard sequence file
-                standard_seq_path = os.path.join(STANDARD_PATH, f"/{protein_abbr}.fas")
+                standard_seq_path = os.path.join(STANDARD_PATH, f"{protein_abbr}.fas")
                 standard_seq = next(SeqIO.parse(standard_seq_path, 'fasta')).seq
 
                 # Perform global alignment
