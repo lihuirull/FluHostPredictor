@@ -220,7 +220,7 @@ def convert_HA_residues(marker_dict, HA_types, structure_folder):
     updated_marker_dict = marker_dict.copy()  # Create copy
     for protein in list(marker_dict.keys()):
         if protein in HA_types:
-            mapping_data = pd.read_csv(f"{structure_folder}/H3_{protein}", sep = "\t", header = None,
+            mapping_data = pd.read_csv(f"{structure_folder}/H3_{protein}.txt", sep = "\t", header = None,
                                        names = ['H3', protein])
             convert_to_h3_dict = dict(zip(mapping_data[protein], mapping_data['H3']))
 
