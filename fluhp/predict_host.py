@@ -150,10 +150,11 @@ def predict_new_data(input_marker_path, model_path, threshold_path, top_features
     # Create a DataFrame with the predictions and strain IDs
     prediction_results = pd.DataFrame({
         'Strain ID': processed_data_top_features.index,
-        'Prediction': predictions
+        'Prediction': predictions,
+        'Probability': new_data_proba
     }).reset_index(drop = True)
 
-    prediction_results.to_csv(f"{output_directory}/{add_prefix}_prediction.csv")
+    prediction_results.to_csv(f"{output_directory}/{add_prefix}prediction.csv")
 
     return prediction_results
 
