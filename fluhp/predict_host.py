@@ -139,7 +139,9 @@ def predict_new_data(input_marker_path, model_path, threshold_path, top_features
 
     # Select only the top features from the processed data
     processed_data_top_features = processed_data.reindex(columns = top_features).fillna(0)
-
+    print(processed_data_top_features)
+    print('-'*50)
+    print(processed_data)
     # Predict probabilities for the new data
     new_data_proba = loaded_model.predict_proba(processed_data_top_features)[:, 1]
 
